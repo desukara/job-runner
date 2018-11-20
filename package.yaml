@@ -1,0 +1,28 @@
+name:                desukara-job-runner 
+version:             0.1.0.0
+synopsis:            Desukara Discord bot; Job runner.
+# homepage:            https://github.com/githubuser/job-runner#readme
+license:             BSD3
+author:              Andy Chun @noneucat 
+maintainer:          andy@lolc.at 
+copyright:           2018 Sang Hak (Andy) Chun
+extra-source-files:
+- README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - desukara-dblib 
+  - time
+  - text
+  - directory
+  - uuid
+  - cassava
+  - bytestring
+  - process
+  - async
+  - filepath
+
+executables:
+  job-runner:
+    source-dirs:      src
+    main:             Main.hs

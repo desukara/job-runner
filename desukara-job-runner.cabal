@@ -1,0 +1,41 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 11ba810f2ff16a86fd403c7569b5a1c860d25cbc0bfd63eb39170b16fd55e0b6
+
+name:           desukara-job-runner
+version:        0.1.0.0
+synopsis:       Desukara Discord bot; Job runner.
+author:         Andy Chun @noneucat
+maintainer:     andy@lolc.at
+copyright:      2018 Sang Hak (Andy) Chun
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+executable job-runner
+  main-is: Main.hs
+  other-modules:
+      Desukara.FirejailRunner
+      Desukara.JobTypes.RScript
+      Paths_desukara_job_runner
+  hs-source-dirs:
+      src
+  build-depends:
+      async
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , desukara-dblib
+    , directory
+    , filepath
+    , process
+    , text
+    , time
+    , uuid
+  default-language: Haskell2010
