@@ -34,7 +34,8 @@ resolver: lts-12.19
 #  - wai
 packages:
 - .
-- ../db-library
+- github: desukara/dblib
+  commit: 90e52a557b63a988e16ef8f631d77e05c5450100
 # Dependency packages to be pulled from upstream that are not in the resolver
 # using the same syntax as the packages field.
 # (e.g., acme-missiles-0.3)
