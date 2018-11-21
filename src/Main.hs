@@ -33,7 +33,7 @@ mainLoop ctx ourId =
       then do
         let selectedJob = head jobs
 
-        putStrLn "Starting job: " ++ show jobid ++ " ..." 
+        putStrLn $ "Starting job: " ++ show selectedJob ++ " ..." 
 
         case jobParameters selectedJob of
           RScript _ _ ->  runRScriptJob ctx selectedJob
