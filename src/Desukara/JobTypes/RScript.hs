@@ -33,7 +33,7 @@ runRScriptJob :: DbContext -> Job -> IO ()
 runRScriptJob ctx job =
     do
         let jobid = jobId job
-            channel = jobChannel job
+            requestedData = jobRequestedChannelData job
             rs = jobParameters job
             script = rHeader ++ rsScript rs
 
@@ -47,7 +47,7 @@ runRScriptJob ctx job =
         let init path = writeFile (path ++ "script.r") script
 
         (stdout, finished) <- firejailRunner 
-            ctx [(channel, Nothing, Nothing)]  -- todo range support
+            ctx (map (\x -> (x, Nothing, Nothing)) requestedData)  
             "Rscript" ["--slave", "./script.r"] init
 
         let updateLoop = 
