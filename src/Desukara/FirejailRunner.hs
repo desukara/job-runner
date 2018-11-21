@@ -80,7 +80,7 @@ firejailRunner ctx
                         -- ,   "--rlimit-as=" ++ show (512 * 10^6) -- 512mb virtual memory
                         ,   "--rlimit-cpu=" ++ show (60*5) -- 5 minutes of CPU time
                         ,   "--rlimit-fsize=" ++ show (5 * 10^6) -- 5mb max file creation
-                        ,   "--net=eth0"
+                        ,   "--net=none"
                         ,   "--private-dev"
                         ,   "--private-tmp"
                         ,   "--blacklist=/tmp"

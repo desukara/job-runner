@@ -20,11 +20,14 @@ rJobOutput = defaultOutput {
     footer = Just "R Script Job"
 }
 
-rHeader = "Messages <- read.table(\"data/messages.csv\", header=TRUE, sep=\",\")\n" 
-    --    ++ "Messages$messageLastIndexed <- as.POSIXct(Messages$messageLastIndexed)\n"
-       ++ "Messages$messageTimestamp <- as.POSIXct(Messages$messageTimestamp)\n"
-    --    ++ "Messages$messageEditedTimestamp <- as.POSIXct(Messages$messageEditedTimestamp)\n"
-       ++ "png(\"output/default.png\")\n"
+rHeader = intercalate "\n"
+    [ "library(anytime)"
+    , "Messages <- read.table(\"data/messages.csv\", header=TRUE, sep=\",\")" 
+    , "Messages$messageLastIndexed <- anytime(Messages$messageLastIndexed)"
+    , "Messages$messageTimestamp <- anytime(Messages$messageTimestamp)"
+    , "Messages$messageEditedTimestamp <- anytime(Messages$messageEditedTimestamp)"
+    , "png(\"output/default.png\")"
+    ]
 
 runRScriptJob :: DbContext -> Job -> IO ()
 runRScriptJob ctx job =
