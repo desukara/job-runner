@@ -78,6 +78,8 @@ runRScriptJob ctx job =
                 createProcess (shell $ "scp -o ConnectTimeout=10 -i /etc/desukara/uploads.key "
                             ++ plot ++ " desukara@lolc.at:/var/www/uploads.lolc.at/" ++ jobid ++ takeFileName plot)) plots -- todo configurable
 
+        threadDelay (1 * 10^6) -- todo: check for completion of transfer...
+
         -- todo configurable
         let urls = map (\x -> "https://uploads.lolc.at/" ++ jobid ++ takeFileName x) plots 
 
