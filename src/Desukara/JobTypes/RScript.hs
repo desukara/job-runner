@@ -75,8 +75,8 @@ runRScriptJob ctx job =
         let plots = filter (\x -> takeExtension x == ".png") filePaths
 
         mapM_ (\plot -> 
-                createProcess (proc "rsync" 
-                                [ "-e", "\"ssh -i /etc/desukara/uploads.key\"", "--timeout", "5", "--chmod", "777"
+                createProcess (proc "ssh" 
+                                [ "-o", "ConnectTimeout=10", "-i", "/etc/desukara/uploads.key"
                                 , plot, "desukara@lolc.at:/var/www/uploads.lolc.at/" ++ jobid ++ takeFileName plot])) plots -- todo configurable
 
         -- todo configurable
