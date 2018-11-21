@@ -75,9 +75,9 @@ runRScriptJob ctx job =
         let plots = filter (\x -> takeExtension x == ".png") filePaths
 
         mapM_ (\plot -> 
-                createProcess (proc "ssh" 
+                createProcess (proc "scp" 
                                 [ "-o", "ConnectTimeout=10", "-i", "/etc/desukara/uploads.key"
-                                , plot, "desukara@lolc.at:/var/www/uploads.lolc.at/" ++ jobid ++ takeFileName plot])) plots -- todo configurable
+                                , "\"" ++ plot ++ "\"", "desukara@lolc.at:/var/www/uploads.lolc.at/" ++ jobid ++ takeFileName plot])) plots -- todo configurable
 
         -- todo configurable
         let urls = map (\x -> "https://uploads.lolc.at/" ++ jobid ++ takeFileName x) plots 
