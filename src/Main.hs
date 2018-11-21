@@ -32,8 +32,14 @@ mainLoop ctx ourId =
       if length jobs > 0
       then do
         let selectedJob = head jobs
+
+        putStrLn "Starting job: " ++ show jobid ++ " ..." 
+
         case jobParameters selectedJob of
           RScript _ _ ->  runRScriptJob ctx selectedJob
+
+        putStrLn "Job finished!" 
+
       else return ()
 
       threadDelay (1 * 10^6)

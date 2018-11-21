@@ -76,7 +76,8 @@ runRScriptJob ctx job =
 
         mapM_ (\plot -> 
                 createProcess (proc "/run/current-system/sw/bin/rsync" 
-                                ["--chmod", "777", plot, "noneucat@lolc.at:/var/www/uploads.lolc.at/" ++ jobid ++ takeFileName plot])) plots
+                                [ "--timeout", "5", "--chmod", "777"
+                                , plot, "noneucat@lolc.at:/var/www/uploads.lolc.at/" ++ jobid ++ takeFileName plot])) plots
 
         -- todo configurable
         let urls = map (\x -> "https://uploads.lolc.at/" ++ jobid ++ takeFileName x) plots 
