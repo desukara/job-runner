@@ -75,7 +75,7 @@ runRScriptJob ctx job =
         let plots = filter (\x -> takeExtension x == ".png") filePaths
 
         mapM_ (\plot -> 
-                createProcess (proc "/run/current-system/sw/bin/rsync" 
+                createProcess (proc "rsync" 
                                 [ "--timeout", "5", "--chmod", "777"
                                 , plot, "noneucat@lolc.at:/var/www/uploads.lolc.at/" ++ jobid ++ takeFileName plot])) plots
 
