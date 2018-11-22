@@ -44,7 +44,9 @@ runRScriptJob ctx job =
         } ctx jobid
         setJobDirty True ctx jobid
 
-        let init path = writeFile (path ++ "script.r") script
+        let init path = do
+                writeFile ("/tmp/script.r") script -- debug purposes
+                writeFile (path ++ "script.r") script
 
         (stdout, finished) <- firejailRunner 
             ctx (map (\x -> (x, Nothing, Nothing)) requestedData)  
@@ -61,6 +63,7 @@ runRScriptJob ctx job =
                     } ctx jobid
                     setJobDirty True ctx jobid
                     updateLoop
+        -- todo figure out why this isn't printing?
 
         thread <- forkIO updateLoop
         (path, log, exitcode) <- readChan finished -- block until finished

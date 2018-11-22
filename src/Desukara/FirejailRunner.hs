@@ -69,6 +69,7 @@ firejailRunner ctx
                 let msgs = concat qr 
                     msgsEncoded = encodeDefaultOrderedByName msgs 
 
+                B.writeFile ("/tmp/messages.csv") msgsEncoded
                 B.writeFile (dataDirectoryPath ++ "messages.csv") msgsEncoded
 
                 -- run provided init
