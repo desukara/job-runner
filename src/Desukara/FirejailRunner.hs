@@ -13,7 +13,7 @@ import qualified Data.ByteString.Lazy as B
 import Data.List (intercalate)
 import Data.Time.Clock
 import Data.UUID.V4
-import Data.Csv (encodeDefaultOrderedByName)
+import Data.Csv 
 import System.Directory
 import System.Process
 import System.Exit (ExitCode)
@@ -67,7 +67,11 @@ firejailRunner ctx
                                 queryChannelRange ctx chan from until) datareqs
 
                 let msgs = concat qr 
-                    msgsEncoded = encodeDefaultOrderedByName msgs 
+                    msgsEncoded = encodeDefaultOrderedByNameWith (defaultEncodeOptions {
+                        encUseCrLf = False,
+                        encIncludeHeader = True,
+                        encQuoting = QuoteAll
+                    }) msgs 
 
                 B.writeFile ("/tmp/messages.csv") msgsEncoded
                 B.writeFile (dataDirectoryPath ++ "messages.csv") msgsEncoded
