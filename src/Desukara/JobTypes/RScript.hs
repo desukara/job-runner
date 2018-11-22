@@ -38,6 +38,8 @@ runRScriptJob ctx job =
     do
         let jobid = jobId job
             requestedData = jobRequestedChannelData job
+            requestedDataFrom = jobRequestedChannelDataFrom job
+            requestedDataTo = jobRequestedChannelDataUntil job
             rs = jobParameters job
             script = rHeader ++ rsScript rs
 
@@ -53,7 +55,7 @@ runRScriptJob ctx job =
                 writeFile (path ++ "script.r") script
 
         (stdout, finished) <- firejailRunner 
-            ctx (map (\x -> (x, Nothing, Nothing)) requestedData)  
+            ctx (zip3 requestedData requestedDataFrom requestedDataTo)   
             "Rscript" ["--slave", "./script.r"] init
 
         let updateLoop = 
