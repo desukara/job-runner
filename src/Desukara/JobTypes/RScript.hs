@@ -23,11 +23,11 @@ rJobOutput = defaultOutput {
 rHeader = intercalate "\n"
     [ "library(anytime)"
     , "Messages <- read.table(\"data/messages.csv\", header=TRUE, sep=\",\")" 
-    , "Messages$messageId <- toString(Messages$messageId)"
+    , "Messages$messageId <- trimws(toString(Messages$messageId))"
     , "Messages$messageLastIndexed <- anytime(Messages$messageLastIndexed)"
-    , "Messages$messageChannel <- toString(Messages$messageChannel)"
-    , "Messages$messageGuild <- toString(Messages$messageGuild)"
-    , "Messages$messageAuthor <- toString(Messages$messageAuthor)"
+    , "Messages$messageChannel <- trimws(toString(Messages$messageChannel))"
+    , "Messages$messageGuild <- trimws(toString(Messages$messageGuild))"
+    , "Messages$messageAuthor <- trimws(toString(Messages$messageAuthor))"
     , "Messages$messageTimestamp <- anytime(Messages$messageTimestamp)"
     , "Messages$messageEditedTimestamp <- anytime(Messages$messageEditedTimestamp)"
     , "png(\"output/default.png\")"
@@ -74,7 +74,7 @@ runRScriptJob ctx job =
         killThread thread
        
         -- todo configurable
-        let excerpt = "```\n" ++ (take 250 $ intercalate "\n" log) ++ "```\n"
+        let excerpt = "```\n" ++ (take 256 $ intercalate "\n" log) ++ "```\n"
 
         -- stat & upload images
         let outputDirectory = path ++ "output/"
@@ -99,7 +99,7 @@ runRScriptJob ctx job =
                         setJobOutput rJobOutput {
                             imageUrls = urls,
                             inlineTitles = ["Job finished!"],
-                            inlineText = [ "**Raw Output:** (first 8 lines)\n" 
+                            inlineText = [ "**Raw Output:** (first 256 chars)\n" 
                                         ++ excerpt
                                         ++ "*hint: write your human-readable results to `output/result.txt`...*\n\n"]
                         } ctx jobid
