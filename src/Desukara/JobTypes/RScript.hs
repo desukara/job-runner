@@ -59,7 +59,7 @@ runRScriptJob ctx job =
         let updateLoop = 
                 do
                     line <- readChan stdout
-                    putStrLn (take 80 line)
+                    putStrLn (take 50 line)
                     setJobOutput rJobOutput {
                         description = "Crunching numbers...\n",
                         inlineTitles = ["Log"],
@@ -74,7 +74,7 @@ runRScriptJob ctx job =
         killThread thread
        
         -- todo configurable
-        let excerpt = (take $ 80*5) "```\n" ++ intercalate "\n" log ++ "```\n"
+        let excerpt = "```\n" ++ (take 250 $ intercalate "\n" log) ++ "```\n"
 
         -- stat & upload images
         let outputDirectory = path ++ "output/"
