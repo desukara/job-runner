@@ -83,7 +83,7 @@ firejailRunner ctx
                 let fireJailFlags =
                         [   "--noprofile" 
                         -- ,   "--rlimit-as=" ++ show (512 * 10^6) -- 512mb virtual memory
-                        ,   "--rlimit-cpu=" ++ show (60*5) -- 5 minutes of CPU time
+                        ,   "--rlimit-cpu=" ++ show 10 -- 10s cpu time limit
                         ,   "--rlimit-fsize=" ++ show (5 * 10^6) -- 5mb max file creation
                         ,   "--net=none"
                         ,   "--private-dev"
