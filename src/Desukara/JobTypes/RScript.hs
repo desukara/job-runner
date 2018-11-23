@@ -23,7 +23,7 @@ rJobOutput = defaultOutput {
 rHeader = intercalate "\n"
     [ "library(anytime)"
     , "Messages <- read.table(\"data/messages.csv\", header=TRUE, sep=\",\")" 
-    , "if (nrow(Messages) == 0) { stop(\"No data found (channel is either not enabled or scheduled for future indexing).\") }"
+    , "if (nrow(Messages) == 0) { stop(\"No data found (channel is either not enabled or is scheduled for future indexing).\") }"
     , "Channels <- read.table(\"data/channels.csv\", col.names = c(\"channelId\", \"channelName\"), sep=\",\")"
     , "Messages$messageId <- lapply(Messages$messageId, as.character)"
     , "Messages$messageLastIndexed <- anytime(Messages$messageLastIndexed)"
