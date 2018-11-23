@@ -32,7 +32,7 @@ rHeader = intercalate "\n"
     , "Messages$messageAuthor <- lapply(Messages$messageAuthor, as.character)"
     , "Messages$messageTimestamp <- anytime(Messages$messageTimestamp)"
     , "Messages$messageEditedTimestamp <- anytime(Messages$messageEditedTimestamp)"
-    , "png(\"output/default.png\")"
+    , "png(\"output/default.png\", width=800, height=600, pointsize=14)"
     , ""
     ]
 
