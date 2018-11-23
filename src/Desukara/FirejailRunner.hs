@@ -11,7 +11,7 @@ import Control.Concurrent.Chan
 import Control.Concurrent.MVar
 import Control.Concurrent.Async 
 import qualified Data.ByteString.Lazy.Char8 as B
-import Data.List (intercalate)
+import Data.List (intercalate, intersperse)
 import Data.Time.Clock
 import Data.UUID.V4
 import Data.Csv 
@@ -24,6 +24,7 @@ type DataRequest = (DataChannel, DataFrom, DataUntil)
 type DataChannel = String
 type DataFrom = Maybe UTCTime
 type DataUntil = Maybe UTCTime
+type MentionedUsers = [String]
 
 type ProgramPath = String
 type ProgramArg = String
@@ -36,11 +37,13 @@ type Log = [String]
 
 firejailRunner  :: DbContext 
                 -> [DataRequest]
+                -> MentionedUsers
                 -> ProgramPath -> [ProgramArg]
                 -> (OutputDirectory -> IO ())
                 -> IO (Chan StdOut, Chan Finished)
 firejailRunner ctx 
                datareqs
+               users
                program args
                init
     = do
@@ -82,11 +85,15 @@ firejailRunner ctx
                         concatMap (\chan -> "\"" ++ channelId chan   ++ "\","
                                          ++ "\"" ++ channelName chan ++ "\"\n") channels 
 
+                    usersEncoded = B.pack $ intercalate "\n" users
+
                 B.writeFile "/tmp/channels.csv" channelsEncoded
                 B.writeFile "/tmp/messages.csv" msgsEncoded
+                B.writeFile "/tmp/users.csv" usersEncoded
 
                 B.writeFile (dataDirectoryPath ++ "channels.csv") channelsEncoded 
                 B.writeFile (dataDirectoryPath ++ "messages.csv") msgsEncoded
+                B.writeFile (dataDirectoryPath ++ "users.csv") usersEncoded
 
                 -- run provided init
                 init rootDirectoryPath

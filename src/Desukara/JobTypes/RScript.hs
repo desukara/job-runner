@@ -25,6 +25,7 @@ rHeader = intercalate "\n"
     , "Messages <- read.table(\"data/messages.csv\", header=TRUE, sep=\",\")" 
     , "if (nrow(Messages) == 0) { stop(\"No data found (channel is either not enabled or is scheduled for future indexing).\") }"
     , "Channels <- read.table(\"data/channels.csv\", col.names = c(\"channelId\", \"channelName\"), sep=\",\")"
+    , "MentionedUsers <- read.table(\"data/users.csv\", col.names = c(\"userId\"), sep=\",\")"
     , "Messages$messageId <- lapply(Messages$messageId, as.character)"
     , "Messages$messageLastIndexed <- anytime(Messages$messageLastIndexed)"
     , "Messages$messageChannel <- lapply(Messages$messageChannel, as.character)"
@@ -44,6 +45,7 @@ runRScriptJob ctx job =
             requestedData = jobRequestedChannelData job
             requestedDataFrom = jobRequestedChannelDataFrom job
             requestedDataTo = jobRequestedChannelDataUntil job
+            mentionedUsers = jobMentionedUsers job
             rs = jobParameters job
             script = rHeader ++ rsScript rs
 
@@ -59,7 +61,7 @@ runRScriptJob ctx job =
                 writeFile (path ++ "script.r") script
 
         (stdout, finished) <- firejailRunner 
-            ctx (zip3 requestedData requestedDataFrom requestedDataTo)   
+            ctx (zip3 requestedData requestedDataFrom requestedDataTo) mentionedUsers   
             "Rscript" ["--slave", "./script.r"] init
 
         let updateLoop = 
