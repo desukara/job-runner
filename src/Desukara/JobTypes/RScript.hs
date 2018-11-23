@@ -23,6 +23,7 @@ rJobOutput = defaultOutput {
 rHeader = intercalate "\n"
     [ "library(anytime)"
     , "Messages <- read.table(\"data/messages.csv\", header=TRUE, sep=\",\")" 
+    , "if (nrow(messages) == 0) { stop(\"No data found (channel is either not enabled or scheduled for future indexing).\") }"
     , "Channels <- read.table(\"data/channels.csv\", col.names = c(\"channelId\", \"channelName\"), sep=\",\")"
     , "Messages$messageId <- lapply(Messages$messageId, as.character)"
     , "Messages$messageLastIndexed <- anytime(Messages$messageLastIndexed)"
@@ -32,7 +33,7 @@ rHeader = intercalate "\n"
     , "Messages$messageAuthor <- lapply(Messages$messageAuthor, as.character)"
     , "Messages$messageTimestamp <- anytime(Messages$messageTimestamp)"
     , "Messages$messageEditedTimestamp <- anytime(Messages$messageEditedTimestamp)"
-    , "png(\"output/default.png\", width=800, height=600, pointsize=14)"
+    , "png(\"output/default.png\", width=800, height=600, pointsize=16)"
     , ""
     ]
 
