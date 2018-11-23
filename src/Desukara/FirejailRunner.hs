@@ -4,12 +4,13 @@ module Desukara.FirejailRunner (
 
 import DbLib
 import DbLib.GuildDataDb.Messages
+import DbLib.GuildDataDb.Channels
 
 import Control.Concurrent (forkIO, threadDelay)
 import Control.Concurrent.Chan
 import Control.Concurrent.MVar
 import Control.Concurrent.Async 
-import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString.Lazy.Char8 as B
 import Data.List (intercalate)
 import Data.Time.Clock
 import Data.UUID.V4
@@ -63,17 +64,28 @@ firejailRunner ctx
                 createDirectory outputDirectoryPath
 
                 -- populate data folder 
-                qr <- mapM (\(chan, from, until) -> 
+                msgQ <- mapM (\(chan, from, until) -> 
                                 queryChannelRange ctx chan from until) datareqs
 
-                let msgs = concat qr 
+                chanQ <- getActiveChannels ctx
+
+                let msgs = concat msgQ
                     msgsEncoded = encodeDefaultOrderedByNameWith (defaultEncodeOptions {
                         encUseCrLf = False,
                         encIncludeHeader = True,
                         encQuoting = QuoteAll
                     }) msgs 
 
-                B.writeFile ("/tmp/messages.csv") msgsEncoded
+                    queriedChannels = map (\(chan, _, _) -> chan) datareqs
+                    channels = filter (\c -> channelId c `elem` queriedChannels) chanQ
+                    channelsEncoded = B.pack $ 
+                        concatMap (\chan -> "\"" ++ channelId chan   ++ "\","
+                                         ++ "\"" ++ channelName chan ++ "\"\n") channels 
+
+                B.writeFile "/tmp/channels.csv" channelsEncoded
+                B.writeFile "/tmp/messages.csv" msgsEncoded
+
+                B.writeFile (dataDirectoryPath ++ "channels.csv") channelsEncoded 
                 B.writeFile (dataDirectoryPath ++ "messages.csv") msgsEncoded
 
                 -- run provided init

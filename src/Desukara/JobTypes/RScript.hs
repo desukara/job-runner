@@ -23,14 +23,17 @@ rJobOutput = defaultOutput {
 rHeader = intercalate "\n"
     [ "library(anytime)"
     , "Messages <- read.table(\"data/messages.csv\", header=TRUE, sep=\",\")" 
+    , "Channels <- read.table(\"data/channels.csv\", col.names = c(\"channelId\", \"channelName\"), sep=\",\")"
     , "Messages$messageId <- lapply(Messages$messageId, as.character)"
     , "Messages$messageLastIndexed <- anytime(Messages$messageLastIndexed)"
     , "Messages$messageChannel <- lapply(Messages$messageChannel, as.character)"
+    , "Messages$messageChannel <- with(Channels, channelName[match(Messages$messageChannel, Channels$channelId)])"
     , "Messages$messageGuild <- lapply(Messages$messageGuild, as.character)" 
     , "Messages$messageAuthor <- lapply(Messages$messageAuthor, as.character)"
     , "Messages$messageTimestamp <- anytime(Messages$messageTimestamp)"
     , "Messages$messageEditedTimestamp <- anytime(Messages$messageEditedTimestamp)"
     , "png(\"output/default.png\")"
+    , ""
     ]
 
 runRScriptJob :: DbContext -> Job -> IO ()
